@@ -25,3 +25,7 @@ install node
 
 install npm
     installed with node - nothing to do
+
+install vermin dependencies
+    cd [vermin root]
+    npm install
