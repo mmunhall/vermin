@@ -37,6 +37,7 @@ console.log("Running...");
 function exec() {
 
     gpio.open(7, "output", function(err) {
+        console.log(err);
         gpio.write(7, 1, function() {
             gpio.close(7);
         });
