@@ -5,7 +5,8 @@ A simple project for the Raspberry Pi to notify when a vermin has been captured 
 
 
 Notes:
-install os (raspian)
+install os (raspbian)
+
 setup network config (etc/network/interfaces)
     auto lo
 
@@ -19,5 +20,8 @@ setup network config (etc/network/interfaces)
     	wpa-psk "password"
 
 install node
-install npm
+    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+    sudo dpkg -i node_latest_armhf.deb
 
+install npm
+    installed with node - nothing to do
