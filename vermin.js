@@ -36,32 +36,12 @@ console.log('interval: %j', program.interval);
 console.log('email: %j', program.email);
 console.log("Running...");
 
-function reset() {
-    gpio.open(PIN_LED, "output", function(err) { });
-    gpio.write(PIN_LED, 1, function() { });
-    setTimeout(function () {
-        gpio.write(PIN_LED, 0);
-        gpio.close(PIN_LED);
-    }, 2000);
-}
-
 function exec() {
-
-    var ledPinState = gpio.read(PIN_LED);
-
-    console.log("pin state", ledPinState);
-
     gpio.open(PIN_LED, "output", function(err) {
-        if (err) {
-            console.log(err);
-        } else {
-            gpio.write(PIN_LED, 1, function() {
-                gpio.close(PIN_LED);
-            });
-            setInterval(exec, program.interval * 1000);
-        }
+        gpio.write(PIN_LED, 1, function() {
+            gpio.close(PIN_LED);
+        });
     });
 }
 
-reset();
-// exec();
+exec();
