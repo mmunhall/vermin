@@ -42,6 +42,14 @@ function exec() {
             gpio.close(PIN_LED);
         });
     });
+
+    setInterval(function () {
+        gpio.open(PIN_LED, "output", function(err) {
+            gpio.write(PIN_LED, 0, function() {
+                gpio.close(PIN_LED);
+            });
+        });
+    }, 3000);
 }
 
 exec();
