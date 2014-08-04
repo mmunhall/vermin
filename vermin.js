@@ -51,13 +51,16 @@ function exec() {
     console.log("pin state", ledPinState);
 
     gpio.open(PIN_LED, "output", function(err) {
-        gpio.write(PIN_LED, 1, function() {
-            gpio.close(PIN_LED);
-        });
+        if (err) {
+            console.log(err);
+        } else {
+            gpio.write(PIN_LED, 1, function() {
+                gpio.close(PIN_LED);
+            });
+            setInterval(exec, program.interval * 1000);
+        }
     });
-
-    setInterval(exec, program.interval * 1000);
 }
 
-//reset();
+reset();
 exec();
