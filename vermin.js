@@ -48,6 +48,8 @@ function exec() {
 
     var ledPinState = gpio.read(PIN_LED);
 
+    console.log("pin state", ledPinState);
+
     gpio.open(PIN_LED, "output", function(err) {
         gpio.write(PIN_LED, 1, function() {
             gpio.close(PIN_LED);
@@ -57,5 +59,5 @@ function exec() {
     setInterval(exec, program.interval * 1000);
 }
 
-// reset();
+//reset();
 exec();
