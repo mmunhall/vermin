@@ -38,24 +38,12 @@ console.log("Running...");
 
 function exec() {
     gpio.open(PIN_LED, "output", function(err) {
-        if (err) {
-            console.log(err);
-        }
         gpio.write(PIN_LED, 1, function() {
             gpio.close(PIN_LED);
         });
     });
 
-    setInterval(function () {
-        gpio.open(PIN_LED, "output", function(err) {
-            if (err) {
-                console.log(err);
-            }
-            gpio.write(PIN_LED, 0, function() {
-                gpio.close(PIN_LED);
-            });
-        });
-    }, 3000);
+    setTimeout(exec, 3000);
 }
 
 exec();
