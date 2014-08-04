@@ -37,11 +37,12 @@ console.log('email: %j', program.email);
 console.log("Running...");
 
 function reset() {
-    gpio.open(PIN_LED, "output", function(err) {
-        gpio.write(PIN_LED, 0, function() {
-            gpio.close(PIN_LED);
-        });
-    });
+    gpio.open(PIN_LED, "output", function(err) { });
+    gpio.write(PIN_LED, 1, function() { });
+    setTimeout(function () {
+        gpio.write(PIN_LED, 0);
+        gpio.close(PIN_LED);
+    }, 2000);
 }
 
 function exec() {
@@ -63,4 +64,4 @@ function exec() {
 }
 
 reset();
-exec();
+// exec();
