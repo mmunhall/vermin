@@ -4,6 +4,7 @@ var program = require('./node_modules/commander');
 var gpio = require('./node_modules/pi-gpio');
 
 var PIN_LED = 7;
+var PIN_MONITOR = 11;
 
 function sanitizeInterval(val) {
     var interval = parseInt(val, 10);
@@ -37,8 +38,17 @@ console.log('email: %j', program.email);
 console.log("Running...");
 
 function exec() {
+    var monitor_state;
+
+    gpio.open(PIN_MONITOR, "input", function(err) {
+        gpio.read(PIN_MONITOR, function(err, value) {
+            console.log(value);
+            monitor_state = value;
+        }
+    });
+
     gpio.open(PIN_LED, "output", function(err) {
-        gpio.write(PIN_LED, 1, function() {
+        gpio.write(PIN_LED, monitor_state, function() {
             gpio.close(PIN_LED);
         });
     });
