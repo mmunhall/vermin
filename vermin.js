@@ -39,16 +39,12 @@ console.log("Running...");
 
 var monitor_state;
 
-gpio.open(PIN_MONITOR, "input");
-
 function exec() {
-    gpio.read(PIN_MONITOR, function(err, value) {
-        if (err) {
-            console.log(err);
-            exit();
-        }
-        console.log(value);
-        monitor_state = value;
+    gpio.open(PIN_MONITOR, "input", function(err) {
+        gpio.read(PIN_MONITOR, function(err, value) {
+            monitor_state = value;
+            gpio.close(PIN_MONITOR);
+        });
     });
 
     gpio.open(PIN_LED, "output", function(err) {
