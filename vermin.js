@@ -44,7 +44,7 @@ function exec() {
         gpio.read(PIN_MONITOR, function(err, value) {
             console.log(value);
             monitor_state = value;
-        }
+        });
     });
 
     gpio.open(PIN_LED, "output", function(err) {
