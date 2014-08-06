@@ -37,11 +37,12 @@ console.log('interval: %j', program.interval);
 console.log('email: %j', program.email);
 console.log("Running...");
 
-var monitor_state;
+var monitor_state = 0;
 
 function exec() {
     gpio.open(PIN_MONITOR, "input", function(err) {
         gpio.read(PIN_MONITOR, function(err, value) {
+            console.log(value);
             monitor_state = value;
             gpio.close(PIN_MONITOR);
         });
@@ -49,11 +50,12 @@ function exec() {
 
     gpio.open(PIN_LED, "output", function(err) {
         gpio.write(PIN_LED, monitor_state, function() {
+            console.log("monitor_state: " + monitor_state);
             gpio.close(PIN_LED);
         });
     });
 
-    setTimeout(exec, 200);
+    setTimeout(exec, 2000);
 }
 
 exec();
