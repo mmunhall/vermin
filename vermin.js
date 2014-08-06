@@ -37,7 +37,7 @@ console.log('interval: %j', program.interval);
 console.log('email: %j', program.email);
 console.log("Running...");
 
-var monitor state;
+var monitor_state;
 
 function exec() {
     gpio.open(PIN_MONITOR, "input", function(err) {
