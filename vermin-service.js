@@ -1,6 +1,6 @@
-// var gpio = require("./node_modules/pi-gpio");
+var gpio = require("./node_modules/pi-gpio");
 
-var LED_IN           = 7,           // Pi pin number for LED circuit
+var LED_PIN          = 7,           // Pi pin number for LED circuit
     MONITOR_PIN      = 11;          // Pi pin number for monitor circuit
     MONITOR_INTERVAL = 2000;        // Number of milliseconds before LED blinks while monitoring trap
     HIT_INTERVAL     = 250;         // Number of milliseconds before LED blinks once trap is triggered.
@@ -24,9 +24,9 @@ function notify () {
 function setLedHigh () {
     var interval = current_state = "monitoring" ? MONITOR_INTERVAL : HIT_INTERVAL;
 
-    gpio.open(PIN_LED, "output", function(err) {
-        gpio.write(PIN_LED, 1, function() {
-            gpio.close(PIN_LED);
+    gpio.open(LED_PIN, "output", function(err) {
+        gpio.write(LED_PIN, 1, function() {
+            gpio.close(LED_PIN);
 
             setTimeout(setLedLow, interval);
         });
@@ -34,9 +34,9 @@ function setLedHigh () {
 }
 
 function setLedLow () {
-    gpio.open(PIN_LED, "output", function(err) {
-        gpio.write(PIN_LED, 0, function() {
-            gpio.close(PIN_LED);
+    gpio.open(LED_PIN, "output", function(err) {
+        gpio.write(LED_PIN, 0, function() {
+            gpio.close(LED_PIN);
 
             setTimeout(setLedHigh, 250);
         });
