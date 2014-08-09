@@ -4,23 +4,37 @@ var LED_PIN          = 7,           // Pi pin number for LED circuit
     MONITOR_PIN      = 11;          // Pi pin number for monitor circuit
     MONITOR_INTERVAL = 2000;        // Number of milliseconds before LED blinks while monitoring trap
     HIT_INTERVAL     = 250;         // Number of milliseconds before LED blinks once trap is triggered.
-    POLL_INTERVAL    = 10000;       // Number of milliseconds between polling the monitor circuit for its state
+    POLL_INTERVAL    = 1000;        // Number of milliseconds between polling the monitor circuit for its state
     LOW		     = 0;           // LED LOW
     HIGH	     = 1;	    // LED HIGH
     currentState     = "monitoring" // One of "monitoring" or "hit". Initialized to "monitoring" at startup. Could mutate when polling.
 
 module.exports = {
     start: function () {
-    	currentState = "monitoring";    	
-        cycleLedHigh();
+    	init();
+    	cycleLedHigh();
+        setInterval(execute, POLL_INTERVAL);
     }
 }
 
-function poll () {
+function init () {
+    gpio.open(MONITOR_PIN, "input", function(err) { });
+    gpio.open(LED_PIN, "output", function(err) { });
+}
 
+function execute () {    
+    gpio.read(MONITOR_PIN, function(err, value) {
+    	console.log(value);
+        //currentState = "hit";
+    });
+    //console.log(currentState);
 }
 
 function notify () {
+
+}
+
+function readTrap () {
 
 }
 
@@ -39,11 +53,8 @@ function cycleLedLow () {
 }
 
 function setLed(value, callback) {
-    gpio.open(LED_PIN, "output", function(err) {
-        gpio.write(LED_PIN, value, function() {
-            gpio.close(LED_PIN);
-            if (callback) { callback(); }
-        });
+    gpio.write(LED_PIN, value, function() {
+        if (callback) { callback(); }
     });
 }
 
