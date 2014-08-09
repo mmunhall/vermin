@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('./node_modules/commander');
-var gpio = require('./node_modules/pi-gpio');
-
-var PIN_LED = 7;
-var PIN_MONITOR = 11;
+var service = require('./vermin-service.js');
 
 function sanitizeInterval(val) {
     var interval = parseInt(val, 10);
@@ -37,25 +34,4 @@ console.log('interval: %j', program.interval);
 console.log('email: %j', program.email);
 console.log("Running...");
 
-var monitor_state = 0;
-
-function exec() {
-    gpio.open(PIN_MONITOR, "input", function(err) {
-        gpio.read(PIN_MONITOR, function(err, value) {
-            console.log(value);
-            monitor_state = value;
-            gpio.close(PIN_MONITOR);
-        });
-    });
-
-    gpio.open(PIN_LED, "output", function(err) {
-        gpio.write(PIN_LED, monitor_state, function() {
-            console.log("monitor_state: " + monitor_state);
-            gpio.close(PIN_LED);
-        });
-    });
-
-    setTimeout(exec, 2000);
-}
-
-exec();
+service.start();
