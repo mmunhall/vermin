@@ -1,5 +1,10 @@
 var gpio = require("./node_modules/pi-gpio");
 
+process.stdin.resume();
+process.on('SIGINT', function () {
+    tearDown();
+});
+
 var LED_PIN                = 7,            // Pi pin number for LED circuit
     MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
     MONITOR_LED_INTERVAL   = 2000,         // Number of milliseconds before LED blinks while monitoring trap
@@ -23,9 +28,19 @@ function init () {
     gpio.open(LED_PIN, "output", function(err) { });
 }
 
+/*
+ * Gracefully closes all pins, turns off the LED, and ends the process.
+ * Everything is performed in callbacks so that process.exit() can be called
+ * after all actions have been performed.
+ */
 function tearDown() {
-    gpio.close(MONITOR_PIN, function(err) { });
-    gpio.close(LED_PIN, function(err) { });
+    setLed(LOW, function () {
+	gpio.close(MONITOR_PIN, function(err) {
+	    gpio.close(LED_PIN, function(err) {
+	        process.exit();
+	    });
+        });
+    });
 }
 
 function execute () {
@@ -57,7 +72,7 @@ function cycleLedLow () {
 }
 
 function setLed(value, callback) {
-    gpio.write(LED_PIN, value, function() {
+    gpio.write(LED_PIN, value, function(err) {
         if (callback) { callback(); }
     });
 }

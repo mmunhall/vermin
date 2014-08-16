@@ -32,6 +32,6 @@ program
 
 console.log('interval: %j', program.interval);
 console.log('email: %j', program.email);
-console.log("Running...");
+console.log("Running... Press CTRL-C to quit.");
 
 service.start();
