@@ -1,26 +1,31 @@
 var gpio = require("./node_modules/pi-gpio");
 
-var LED_PIN                = 7,           // Pi pin number for LED circuit
-    MONITOR_PIN            = 11;          // Pi pin number for monitor circuit
-    MONITOR_LED_INTERVAL   = 2000;        // Number of milliseconds before LED blinks while monitoring trap
-    TRIGGERED_LED_INTERVAL = 250;         // Number of milliseconds before LED blinks once trap is triggered.
-    POLL_INTERVAL          = 1000;        // Number of milliseconds between polling the monitor circuit for its state
-    LOW		               = 0;           // LED LOW
-    HIGH	               = 1;           // LED HIGH
-    currentState           = "monitoring" // One of "monitoring" or "triggered". Initialized to "monitoring" at startup. Could mutate when polling.
-    executeIntervalId;                    // A handle on the setInterval() call.
+var LED_PIN                = 7,            // Pi pin number for LED circuit
+    MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
+    MONITOR_LED_INTERVAL   = 2000,         // Number of milliseconds before LED blinks while monitoring trap
+    TRIGGERED_LED_INTERVAL = 250,          // Number of milliseconds before LED blinks once trap is triggered.
+    POLL_INTERVAL          = 1000,         // Number of milliseconds between polling the monitor circuit for its state
+    LOW		           = 0,            // LED LOW
+    HIGH	           = 1,            // LED HIGH
+    currentState           = "monitoring", // One of "monitoring" or "triggered". Initialized to "monitoring" at startup. Could mutate when polling.
+    executeIntervalId;                     // A handle on the setInterval() call.
 
 module.exports = {
     start: function () {
     	init();
     	cycleLedHigh();
-        pollIntervalId = setInterval(execute, POLL_INTERVAL);
+        executeIntervalId = setInterval(execute, POLL_INTERVAL);
     }
 }
 
 function init () {
     gpio.open(MONITOR_PIN, "input", function(err) { });
     gpio.open(LED_PIN, "output", function(err) { });
+}
+
+function tearDown() {
+    gpio.close(MONITOR_PIN, function(err) { });
+    gpio.close(LED_PIN, function(err) { });
 }
 
 function execute () {
@@ -34,7 +39,7 @@ function execute () {
 }
 
 function notify () {
-    console.log("notify!");
+    console.log("Trap shut! TODO: Send an email to me@example.com.");
 }
 
 function cycleLedHigh () {
