@@ -34,4 +34,9 @@ console.log('interval: %j', program.interval);
 console.log('email: %j', program.email);
 console.log("Running... Press CTRL-C to quit.");
 
+process.stdin.resume();
+process.on('SIGINT', function () {
+    service.stop();
+});
+
 service.start();

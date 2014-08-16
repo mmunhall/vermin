@@ -1,10 +1,5 @@
 var gpio = require("./node_modules/pi-gpio");
 
-process.stdin.resume();
-process.on('SIGINT', function () {
-    tearDown();
-});
-
 var LED_PIN                = 7,            // Pi pin number for LED circuit
     MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
     MONITOR_LED_INTERVAL   = 2000,         // Number of milliseconds before LED blinks while monitoring trap
@@ -20,6 +15,9 @@ module.exports = {
     	init();
     	cycleLedHigh();
         executeIntervalId = setInterval(execute, POLL_INTERVAL);
+    },
+    stop: function () {
+        tearDown();
     }
 }
 
