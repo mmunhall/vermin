@@ -23,6 +23,7 @@ module.exports = {
     }
 }
 
+// Opens the Pi input and output pins, starts the LED flashing.
 function setup () {
     gpio.open(MONITOR_PIN, "input", function(err) { });
     gpio.open(LED_PIN, "output", function(err) { });
@@ -44,9 +45,11 @@ function tearDown() {
     });
 }
 
+// Reads the monitor pin. If the pin is low, currentState is changed to "triggered"
+// and notifications are sent.
 function execute () {
     gpio.read(MONITOR_PIN, function(err, value) {
-    	if (value === 0) {
+    	if (value === LOW) {
             currentState = "triggered";
             notify();
             clearInterval(executeIntervalId);
@@ -54,6 +57,8 @@ function execute () {
     });
 }
 
+// Currently, only sends an email message (if the email options were provided).
+// In the future, notifiy() might also send SMS.
 function notify () {
     if (options.emailTo) {
         mailService.sendMessage({
@@ -64,6 +69,7 @@ function notify () {
     }
 }
 
+// Sets the LED pin high and creates an interval to set the LED low in the future.
 function cycleLedHigh () {
     var interval = currentState === "monitoring" ? MONITOR_LED_INTERVAL : TRIGGERED_LED_INTERVAL;
 
@@ -72,12 +78,14 @@ function cycleLedHigh () {
     });
 }
 
+// Sets the LED pin low  and creates an interval to set the LED high in the future.
 function cycleLedLow () {
     setLed(LOW, function () {
     	setTimeout(cycleLedHigh, 250);
     });
 }
 
+// Sets the LED high or low, and executes an optional callback.
 function setLed(value, callback) {
     gpio.write(LED_PIN, value, function(err) {
         if (callback) { callback(); }
