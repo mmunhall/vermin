@@ -1,5 +1,5 @@
 var gpio = require("./node_modules/pi-gpio");
-var mailService = require("./node_modules/vermin-mailer");
+var mailService = require("./vermin-mailer.js");
 
 var LED_PIN                = 7,            // Pi pin number for LED circuit
     MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
