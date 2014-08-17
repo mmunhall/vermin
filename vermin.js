@@ -23,7 +23,7 @@ function sanitizeString(val) {
 
 program
   .version(pkg.version)
-  .usage('./vermin.js')
+  .usage('./vermin.js [options]')
   .option('-e, --emailTo [emailTo]', 'Notification email to address', sanitizeEmail)
   .option('-f, --emailFrom [emailFrom]', 'Notification email from address', sanitizeEmail)
   .option('-p, --emailPass [emailPass]', 'Notification email transport password (assumes Gmail)', sanitizeString)
