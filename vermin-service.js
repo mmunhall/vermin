@@ -15,8 +15,7 @@ var LED_PIN                = 7,            // Pi pin number for LED circuit
 module.exports = {
     start: function (optionsIn) {
         options = optionsIn;
-    	init();
-    	cycleLedHigh();
+    	setup();
         executeIntervalId = setInterval(execute, POLL_INTERVAL);
     },
     stop: function () {
@@ -24,9 +23,10 @@ module.exports = {
     }
 }
 
-function init () {
+function setup () {
     gpio.open(MONITOR_PIN, "input", function(err) { });
     gpio.open(LED_PIN, "output", function(err) { });
+    cycleLedHigh();
 }
 
 /*
