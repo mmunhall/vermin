@@ -10,7 +10,7 @@ var LED_PIN                = 7,            // Pi pin number for LED circuit
     HIGH                   = 1,            // LED HIGH
     currentState           = "monitoring", // One of "monitoring" or "triggered". Initialized to "monitoring" at startup. Could mutate when polling.
     executeIntervalId,                     // A handle on the setInterval() call.
-    options,                               // Runtime parameters (such as email info) specified by the user
+    options;                               // Runtime parameters (such as email info) specified by the user
 
 module.exports = {
     start: function (optionsIn) {

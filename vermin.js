@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('./node_modules/commander');
-// var service = require('./vermin-service.js');
-var package = require('./package');
+var service = require('./vermin-service.js');
+var pkg = require('./package');
 
 function sanitizeEmail(val) {
     var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
@@ -22,7 +22,7 @@ function sanitizeString(val) {
 }
 
 program
-  .version(package.version)
+  .version(pkg.version)
   .usage('./vermin.js')
   .option('-e, --emailTo [emailTo]', 'Notification email to address', sanitizeEmail)
   .option('-f, --emailFrom [emailFrom]', 'Notification email from address', sanitizeEmail)
@@ -44,4 +44,4 @@ process.on('SIGINT', function () {
     service.stop();
 });
 
-// service.start(program);
+service.start(program);
