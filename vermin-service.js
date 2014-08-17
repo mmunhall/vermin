@@ -27,6 +27,9 @@ module.exports = {
 function setup () {
     gpio.open(MONITOR_PIN, "input", function(err) { });
     gpio.open(LED_PIN, "output", function(err) { });
+
+    // TODO: If the monitor pin is LOW, log to the console and exit. The pin must be high to start.
+
     cycleLedHigh();
 }
 
