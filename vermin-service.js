@@ -1,17 +1,20 @@
 var gpio = require("./node_modules/pi-gpio");
+var mailService = require("./node_modules/vermin-mailer");
 
 var LED_PIN                = 7,            // Pi pin number for LED circuit
     MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
     MONITOR_LED_INTERVAL   = 2000,         // Number of milliseconds before LED blinks while monitoring trap
     TRIGGERED_LED_INTERVAL = 250,          // Number of milliseconds before LED blinks once trap is triggered.
     POLL_INTERVAL          = 1000,         // Number of milliseconds between polling the monitor circuit for its state
-    LOW		           = 0,            // LED LOW
-    HIGH	           = 1,            // LED HIGH
+    LOW                    = 0,            // LED LOW
+    HIGH                   = 1,            // LED HIGH
     currentState           = "monitoring", // One of "monitoring" or "triggered". Initialized to "monitoring" at startup. Could mutate when polling.
-    executeIntervalId;                     // A handle on the setInterval() call.
+    executeIntervalId,                     // A handle on the setInterval() call.
+    options,                               // Runtime parameters (such as email info) specified by the user
 
 module.exports = {
-    start: function () {
+    start: function (optionsIn) {
+        options = optionsIn;
     	init();
     	cycleLedHigh();
         executeIntervalId = setInterval(execute, POLL_INTERVAL);
@@ -33,10 +36,10 @@ function init () {
  */
 function tearDown() {
     setLed(LOW, function () {
-	gpio.close(MONITOR_PIN, function(err) {
-	    gpio.close(LED_PIN, function(err) {
-	        process.exit();
-	    });
+    	gpio.close(MONITOR_PIN, function(err) {
+    	    gpio.close(LED_PIN, function(err) {
+    	        process.exit();
+    	    });
         });
     });
 }
@@ -52,7 +55,13 @@ function execute () {
 }
 
 function notify () {
-    console.log("Trap shut! TODO: Send an email to me@example.com.");
+    if (options.emailTo) {
+        mailService.sendMessage({
+            to: options.emailTo,
+            from: options.emailFrom,
+            pass: options.emailPass
+        });
+    }
 }
 
 function cycleLedHigh () {

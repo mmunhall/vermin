@@ -29,3 +29,8 @@ install npm
 install vermin dependencies
     cd [vermin root]
     npm install
+
+
+TODO:
+    * Test, test, test. It's always tests.
+    * Add option to send SMS
