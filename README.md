@@ -1,3 +1,6 @@
+TODO: Install gpio-admin
+TODO: Update this doc with reference to setup gist.
+
 vermin
 ======
 
