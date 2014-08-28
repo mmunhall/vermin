@@ -1,6 +1,6 @@
 var gpio = require("./node_modules/pi-gpio");
 var mailService = require("./vermin-mailer.js");
-var photoService = require("./vermin-photo.js");
+var exec = require('child_process').exec;
 
 var LED_PIN                = 7,            // Pi pin number for LED circuit
     MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
@@ -55,7 +55,6 @@ function execute () {
     gpio.read(MONITOR_PIN, function(err, value) {
     	if (value === LOW) {
             currentState = "triggered";
-            photograph();
             notify();
             clearInterval(executeIntervalId);
         }
@@ -65,18 +64,18 @@ function execute () {
 // Currently, only sends an email message (if the email options were provided).
 // In the future, notifiy() might also send SMS.
 function notify () {
-    if (options.emailTo) {
-        mailService.sendMessage({
-            to: options.emailTo,
-            from: options.emailFrom,
-            pass: options.emailPass
-        });
-    }
-}
+    var imagePath = "imgCapture/img_" + new Date().valueOf() + ".jpg";
 
-// Captures photograph
-function photograph () {
-    photoService.capture();
+    exec("raspistill -o " + imagePath, function () {
+        if (options.emailTo) {
+            mailService.sendMessage({
+                to: options.emailTo,
+                from: options.emailFrom,
+                pass: options.emailPass,
+                imagePath: imagePath
+            });
+        }
+    });
 }
 
 // Sets the LED pin high and creates an interval to set the LED low in the future.
