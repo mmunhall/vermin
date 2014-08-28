@@ -1,5 +1,6 @@
 var gpio = require("./node_modules/pi-gpio");
 var mailService = require("./vermin-mailer.js");
+var photoService = require("./vermin-photo.js");
 
 var LED_PIN                = 7,            // Pi pin number for LED circuit
     MONITOR_PIN            = 11,           // Pi pin number for monitor circuit
@@ -54,6 +55,7 @@ function execute () {
     gpio.read(MONITOR_PIN, function(err, value) {
     	if (value === LOW) {
             currentState = "triggered";
+            photograph();
             notify();
             clearInterval(executeIntervalId);
         }
@@ -70,6 +72,11 @@ function notify () {
             pass: options.emailPass
         });
     }
+}
+
+// Captures photograph
+function photograph () {
+    photoService.capture();
 }
 
 // Sets the LED pin high and creates an interval to set the LED low in the future.
