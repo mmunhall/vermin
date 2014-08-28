@@ -3,6 +3,7 @@ var exec = require('child_process').exec;
 
 module.exports = {
     capture: function () {
-        exec("raspistill -o 1.jpg");
+        var fileName = "img_" + new Date().valueOf() + ".jpg";
+        exec("raspistill -o imgCapture/" + fileName);
     }
 }
