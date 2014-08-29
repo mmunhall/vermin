@@ -26,7 +26,7 @@ module.exports = {
 
 // Opens the Pi input and output pins, starts the LED flashing.
 function setup () {
-    gpio.open(MONITOR_PIN, "input", function(err) { });
+    gpio.open(MONITOR_PIN, "input pulldown", function(err) { });
     gpio.open(LED_PIN, "output", function(err) { });
 
     // TODO: If the monitor pin is LOW, log to the console and exit. The pin must be high to start.
@@ -53,6 +53,7 @@ function tearDown() {
 // and notifications are sent.
 function execute () {
     gpio.read(MONITOR_PIN, function(err, value) {
+	console.log(value);
     	if (value === LOW) {
             currentState = "triggered";
             notify();
